@@ -1,0 +1,113 @@
+{
+  "$schema": "./servers.config.schema.json",
+  "meta": {
+    "writtenBy": "0.4.0",
+    "schema": 1
+  },
+  "control": {
+    "port": 3999,
+    "host": "local",
+    "openBrowser": false,
+    "auth": {
+      "enabled": true
+    },
+    "label": "Home AI stack"
+  },
+  "defaults": {
+    "enabled": true,
+    "autostart": false,
+    "bind": "local",
+    "onPortConflict": "block",
+    "health": {
+      "http": {
+        "path": "/",
+        "method": "GET",
+        "expectStatusBelow": 400,
+        "expectBody": ""
+      }
+    }
+  },
+  "servers": [
+    {
+      "id": "9router",
+      "label": "9Router gateway",
+      "command": "9router",
+      "args": [
+        "-p",
+        "{port}",
+        "-H",
+        "{host}",
+        "--no-browser",
+        "--skip-update",
+        "--log"
+      ],
+      "port": 4000,
+      "bind": "lan",
+      "autostart": true,
+      "env": {
+        "PORT": "{port}",
+        "HOSTNAME": "{host}"
+      },
+      "dataEnvs": {
+        "DATA_DIR": "{projectDir}/data/.9router"
+      },
+      "stop": {
+        "killGroup": true,
+        "graceMs": 8000,
+        "killPortHolders": true
+      },
+      "health": {
+        "enabled": true,
+        "unhealthyThreshold": 3,
+        "forceRestartAfterMs": 120000,
+        "startTimeoutMs": 300000
+      },
+      "restart": {
+        "enabled": true,
+        "maxRetries": 3,
+        "baseDelayMs": 1000,
+        "factor": 2,
+        "maxDelayMs": 30000
+      },
+      "onPortConflict": "follow"
+    },
+    {
+      "id": "dsh",
+      "label": "dsh",
+      "command": "dsh",
+      "args": [
+        "web",
+        "--port",
+        "{port}",
+        "--host",
+        "{host}",
+        "--no-open",
+        "--trusted-host",
+        "{displayHost}:{port}",
+        "--trusted-host",
+        "localhost:{port}"
+      ],
+      "port": 4374,
+      "bind": "local",
+      "autostart": true,
+      "dataEnvs": {
+        "DSH_HOME": "{projectDir}/data/.dsh"
+      },
+      "health": {
+        "enabled": true,
+        "intervalMs": 10000,
+        "timeoutMs": 4000,
+        "startTimeoutMs": 120000
+      },
+      "stop": {
+        "killGroup": true,
+        "graceMs": 8000,
+        "killPortHolders": true
+      },
+      "onPortConflict": "follow"
+    }
+  ],
+  "backups": {
+    "includePaths": []
+  }
+}

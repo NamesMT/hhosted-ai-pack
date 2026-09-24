@@ -1,0 +1,11 @@
+allowBuilds:
+  9router: true
+  # dsh needs these at runtime: a spawn helper, a native FFI prebuild and the terminal module
+  '@deepseek-ai/dsh-subprocess-local': true
+  koffi: true
+  node-pty: true
+  # no functional install steps: a no-op echo, and nothing at all
+  '@google/genai': false
+  protobufjs: false
+minimumReleaseAgeExclude:
+  - home-hosted@0.4.0
