@@ -1,9 +1,11 @@
 node_modules/
 
-# Tracked: the server definitions only. home-hosted's own state (secrets, logs,
-# backups) lives under state/, and the servers it supervises write into data/.
+# Tracked: the server definitions, and a UI uploaded through Settings → Interface, so a
+# clone (or a backup) keeps the panel the way it was set up. home-hosted's own state
+# (secrets, logs, backups) stays out, and the servers it supervises write into data/.
 state/*
 !state/servers.config.json
+!state/.ui/
 data/*
 
 # pnpm's virtual store bookkeeping
