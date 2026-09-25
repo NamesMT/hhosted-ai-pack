@@ -4,7 +4,7 @@
 
 **A self-contained home AI stack: [9router](https://github.com/decolua/9router) as the gateway, [dsh](https://www.npmjs.com/package/@deepseek-ai/dsh) as the agent harness, both kept alive by [home-hosted](https://github.com/NamesMT/home-hosted).**
 
-Two processes, one JSON file, one panel on <http://127.0.0.1:3999>.
+Two processes, one JSON file, one panel on <http://127.0.0.1:4399>.
 
 </div>
 
@@ -17,9 +17,9 @@ pnpm run up     # panel + both servers, detached
 
 | | |
 | --- | --- |
-| **9router** · `:4000` | one OpenAI-compatible endpoint in front of every provider you hold keys for |
+| **9router** · `:4300` | one OpenAI-compatible endpoint in front of every provider you hold keys for |
 | **dsh** · `:4374` | the harness web UI — sessions, skills and storages live in this repo |
-| **home-hosted** · `:3999` | the panel that starts them, restarts them when they die, streams their logs |
+| **home-hosted** · `:4399` | the panel that starts them, restarts them when they die, streams their logs |
 
 `pnpm run status` shows where everything is, `pnpm run down` stops the lot.
 
@@ -35,10 +35,10 @@ gateway (`data/.9router`) and the harness (`data/.dsh`) all live here. Nothing l
 
 ## 🚀 First run
 
-1. `pnpm install`, then `pnpm run up` and sign in to <http://127.0.0.1:3999> with `hh`.
+1. `pnpm install`, then `pnpm run up` and sign in to <http://127.0.0.1:4399> with `hh`.
 2. **Settings → Authentication**: set a real password, and generate an API token if scripts or agents
    should drive the panel.
-3. <http://127.0.0.1:4000> — add the provider keys you want behind the gateway.
+3. <http://127.0.0.1:4300> — add the provider keys you want behind the gateway.
 4. dsh's token URL, from its log:
 
    ```bash
@@ -54,7 +54,7 @@ After that, `autostart` brings both back with the panel.
 Everything home-hosted needs is in `state/servers.config.json`:
 
 ```json
-{ "id": "9router", "command": "9router", "port": 4000, "bind": "lan", "autostart": true,
+{ "id": "9router", "command": "9router", "port": 4300, "bind": "lan", "autostart": true,
   "dataEnvs": { "DATA_DIR": "{projectDir}/data/.9router" },
   "onPortConflict": "follow",
   "stop": { "killGroup": true, "graceMs": 8000, "killPortHolders": true },

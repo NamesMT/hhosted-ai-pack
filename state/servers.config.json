@@ -5,7 +5,7 @@
     "schema": 1
   },
   "control": {
-    "port": 3999,
+    "port": 4399,
     "host": "local",
     "openBrowser": false,
     "auth": {
@@ -41,7 +41,7 @@
         "--skip-update",
         "--log"
       ],
-      "port": 4000,
+      "port": 4300,
       "bind": "lan",
       "autostart": true,
       "env": {

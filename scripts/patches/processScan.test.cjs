@@ -22,7 +22,7 @@ const {
 } = require("./processScan.cjs");
 
 const PANEL = "node /home/mt/mine/hhosted-9router-dsh/node_modules/.bin/../home-hosted/dist/cli.js up --foreground --home ./state";
-const ROUTER = "node /home/mt/mine/hhosted-9router-dsh/node_modules/.bin/../9router/cli.js -p 4000 -H 0.0.0.0 --no-browser --skip-update --log";
+const ROUTER = "node /home/mt/mine/hhosted-9router-dsh/node_modules/.bin/../9router/cli.js -p 4300 -H 0.0.0.0 --no-browser --skip-update --log";
 
 test("never claims the supervisor, even though the project folder is named after the router", () => {
   assert.equal(isAppProcess(PANEL), false);
@@ -32,7 +32,7 @@ test("never claims the supervisor, even though the project folder is named after
 test("claims the router's own processes", () => {
   assert.equal(isAppProcess(ROUTER), true);
   assert.equal(isAppProcess("node ./node_modules/.bin/../9router/cli.js -p 4001 -H 127.0.0.1"), true);
-  assert.equal(isAppProcess("node C:\\\\x\\\\node_modules\\\\9router\\\\cli.js -p 4000"), true);
+  assert.equal(isAppProcess("node C:\\\\x\\\\node_modules\\\\9router\\\\cli.js -p 4300"), true);
   assert.equal(isAppProcess("node /pkg/9router/tray_linux.js"), true);
   assert.equal(isAppProcess("/pkg/next-server (v16.3.4)"), true);
 });
@@ -62,13 +62,13 @@ test("collectAppPids skips the launcher's own process chain", () => {
 
 test("parseProcessTable reads the pid column and skips headerless junk", () => {
   const rows = parseProcessTable([
-    "  100 node /pkg/9router/cli.js -p 4000",
+    "  100 node /pkg/9router/cli.js -p 4300",
     "  200 bash -c echo 9router",
     "not a process line",
     "",
   ].join("\n"));
   assert.deepEqual(rows, [
-    { pid: 100, command: "node /pkg/9router/cli.js -p 4000" },
+    { pid: 100, command: "node /pkg/9router/cli.js -p 4300" },
     { pid: 200, command: "bash -c echo 9router" },
   ]);
 });
