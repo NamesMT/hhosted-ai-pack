@@ -1,8 +1,8 @@
 {
-  "name": "hhosted-9router-dsh",
+  "name": "hhosted-ai-pack",
   "version": "0.1.0",
   "private": true,
-  "description": "A home AI stack — 9router and dsh — supervised by home-hosted.",
+  "description": "A home AI pack — the OmniRoute and 9router gateways, plus dsh — supervised by home-hosted.",
   "type": "module",
   "packageManager": "pnpm@12.5.1",
   "engines": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "9router": "0.5.75",
     "@deepseek-ai/dsh": "~0.1.7-rc.1",
-    "home-hosted": "^0.4.1"
+    "home-hosted": "^0.4.1",
+    "omniroute": "^3.8.50"
   }
 }

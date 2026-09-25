@@ -4,6 +4,18 @@ allowBuilds:
   '@deepseek-ai/dsh-subprocess-local': true
   koffi: true
   node-pty: true
+  # OmniRoute's native bits: its sqlite driver, the swc compiler it ships, and its own
+  # postinstall (builds the standalone server and fetches its provider data)
+  better-sqlite3: true
+  '@swc/core': true
+  omniroute: true
+  esbuild: true
+  # native extras a supervised server does not need: the OS keychain, a file watcher
+  # (dev only), the local-embedding runtime, and the TLS-fingerprint client
+  keytar: false
+  '@parcel/watcher': false
+  onnxruntime-node: false
+  tls-client-node: false
   # no functional install steps: a no-op echo, and nothing at all
   '@google/genai': false
   protobufjs: false

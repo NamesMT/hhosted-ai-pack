@@ -11,7 +11,7 @@
     "auth": {
       "enabled": true
     },
-    "label": "Home AI stack"
+    "label": "Home AI pack"
   },
   "defaults": {
     "enabled": true,
@@ -41,7 +41,7 @@
         "--skip-update",
         "--log"
       ],
-      "port": 4300,
+      "port": 4397,
       "bind": "lan",
       "autostart": true,
       "env": {
@@ -50,6 +50,46 @@
       },
       "dataEnvs": {
         "DATA_DIR": "{projectDir}/data/.9router"
+      },
+      "stop": {
+        "killGroup": true,
+        "graceMs": 8000,
+        "killPortHolders": true
+      },
+      "health": {
+        "enabled": true,
+        "unhealthyThreshold": 3,
+        "forceRestartAfterMs": 120000,
+        "startTimeoutMs": 300000
+      },
+      "restart": {
+        "enabled": true,
+        "maxRetries": 3,
+        "baseDelayMs": 1000,
+        "factor": 2,
+        "maxDelayMs": 30000
+      },
+      "onPortConflict": "follow"
+    },
+    {
+      "id": "omniroute",
+      "label": "OmniRoute gateway",
+      "command": "omniroute",
+      "args": [
+        "serve",
+        "--port",
+        "{port}",
+        "--no-open",
+        "--log"
+      ],
+      "port": 4367,
+      "bind": "lan",
+      "autostart": true,
+      "env": {
+        "OMNIROUTE_SERVER_HOST": "{host}"
+      },
+      "dataEnvs": {
+        "DATA_DIR": "{projectDir}/data/.omniroute"
       },
       "stop": {
         "killGroup": true,

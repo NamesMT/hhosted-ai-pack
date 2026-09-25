@@ -5,8 +5,8 @@
  *
  * The regression these cases exist for: `isAppProcess` used to accept any node process whose
  * command merely contained "9router" and "cli.js", which matched the *supervisor* — this repo
- * lives at `…/hhosted-9router-dsh/node_modules/home-hosted/dist/cli.js` — so the stale-process
- * sweep SIGKILLed the panel that had just started the router.
+ * used to live at `…/hhosted-9router-dsh/node_modules/home-hosted/dist/cli.js` — so the
+ * stale-process sweep SIGKILLed the panel that had just started the router.
  */
 
 const test = require("node:test");
@@ -21,12 +21,14 @@ const {
   ownProcessChain,
 } = require("./processScan.cjs");
 
-const PANEL = "node /home/mt/mine/hhosted-9router-dsh/node_modules/.bin/../home-hosted/dist/cli.js up --foreground --home ./state";
-const ROUTER = "node /home/mt/mine/hhosted-9router-dsh/node_modules/.bin/../9router/cli.js -p 4300 -H 0.0.0.0 --no-browser --skip-update --log";
+const PANEL = "node /home/mt/mine/hhosted-ai-pack/node_modules/.bin/../home-hosted/dist/cli.js up --foreground --home ./state";
+const ROUTER = "node /home/mt/mine/hhosted-ai-pack/node_modules/.bin/../9router/cli.js -p 4397 -H 0.0.0.0 --no-browser --skip-update --log";
 
-test("never claims the supervisor, even though the project folder is named after the router", () => {
+test("never claims the supervisor, even when the project folder is named after the router", () => {
   assert.equal(isAppProcess(PANEL), false);
-  assert.equal(isAppProcess("node C:\\\\x\\\\hhosted-9router-dsh\\\\node_modules\\\\home-hosted\\\\dist\\\\cli.js up --foreground"), false);
+  assert.equal(isAppProcess("node C:\\\\x\\\\hhosted-ai-pack\\\\node_modules\\\\home-hosted\\\\dist\\\\cli.js up --foreground"), false);
+  // The folder name is irrelevant: only a real 9router package segment counts.
+  assert.equal(isAppProcess("node /home/mt/mine/9router-stack/node_modules/home-hosted/dist/cli.js up --foreground"), false);
 });
 
 test("claims the router's own processes", () => {
@@ -38,7 +40,7 @@ test("claims the router's own processes", () => {
 });
 
 test("ignores anything that is not a node process of ours", () => {
-  assert.equal(isAppProcess("bash -c cd ~/mine/hhosted-9router-dsh && cat state/.logs/9router.log"), false);
+  assert.equal(isAppProcess("bash -c cd ~/mine/hhosted-ai-pack && cat state/.logs/9router.log"), false);
   assert.equal(isAppProcess("vim /pkg/node_modules/9router/cli.js"), false);
   assert.equal(isAppProcess(""), false);
   assert.equal(looksLikeNode("/usr/bin/node"), true);

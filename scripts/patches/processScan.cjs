@@ -45,8 +45,8 @@ function isAppProcess(command) {
   const [executable = ""] = cmd.trim().split(/\s+/);
   if (!looksLikeNode(executable)) return false;
   // The package path, not the substring: a project folder that merely has "9router"
-  // in its name is not us. `…/hhosted-9router-dsh/node_modules/home-hosted/dist/cli.js`
-  // is the supervisor — killing it takes the panel down — and the earlier
+  // in its name is not us. `…/node_modules/home-hosted/dist/cli.js` is the
+  // supervisor — killing it takes the panel down — and the earlier
   // `includes("9router") && includes("cli.js")` matched exactly that.
   return /[\\/]9router[\\/]/.test(cmd)
     || /[\\/]\.bin[\\/]9router(?:\.cmd|\.exe)?(?:\s|$)/i.test(cmd)
