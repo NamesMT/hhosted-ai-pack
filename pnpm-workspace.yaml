@@ -8,4 +8,4 @@ allowBuilds:
   '@google/genai': false
   protobufjs: false
 minimumReleaseAgeExclude:
-  - home-hosted@0.4.0
+  - home-hosted@0.4.0 || 0.4.1

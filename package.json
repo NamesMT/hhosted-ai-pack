@@ -2,7 +2,7 @@
   "name": "hhosted-9router-dsh",
   "version": "0.1.0",
   "private": true,
-  "description": "A home AI stack \u2014 9router and dsh \u2014 supervised by home-hosted.",
+  "description": "A home AI stack — 9router and dsh — supervised by home-hosted.",
   "type": "module",
   "packageManager": "pnpm@12.5.1",
   "engines": {
@@ -20,8 +20,8 @@
     "patch:9router": "node scripts/patch-9router.js"
   },
   "dependencies": {
-    "9router": "^0.5.86",
+    "9router": "0.5.75",
     "@deepseek-ai/dsh": "~0.1.7-rc.1",
-    "home-hosted": "^0.4.0"
+    "home-hosted": "^0.4.1"
   }
 }
