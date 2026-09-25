@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "9router": "0.5.75",
-    "@deepseek-ai/dsh": "~0.1.7-rc.1",
+    "@deepseek-ai/dsh": "~0.1.7-rc.2",
     "home-hosted": "^0.4.1",
     "omniroute": "^3.8.50"
   }
