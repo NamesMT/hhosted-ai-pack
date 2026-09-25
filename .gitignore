@@ -6,7 +6,7 @@ node_modules/
 state/*
 !state/servers.config.json
 !state/.ui/
-data/*
+data/
 
 # pnpm's virtual store bookkeeping
 .pnpm-store/
