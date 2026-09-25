@@ -102,8 +102,8 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 `pnpm run test:patch` covers the matcher.
 
 > [!NOTE]
-> `9router` is pinned to an exact `0.5.75` instead of a range: the later `0.5.x` releases regressed,
-> and the patch is written against this build.
+> `9router` is pinned to an exact `0.5.75` instead of a range: versions above it currently regress
+> **auto key fallback**, and the patch is written against this build.
 
 ---
 
