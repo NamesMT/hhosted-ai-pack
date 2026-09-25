@@ -17,7 +17,9 @@
     "set-token": "home-hosted set-token --home ./state",
     "migrate": "home-hosted migrate --home ./state",
     "postinstall": "node scripts/patch-9router.js --optional",
-    "patch:9router": "node scripts/patch-9router.js"
+    "patch:9router": "node scripts/patch-9router.js",
+    "check:patch": "node scripts/patch-9router.js --check",
+    "test:patch": "node --test scripts/patches/processScan.test.cjs"
   },
   "dependencies": {
     "9router": "0.5.75",
