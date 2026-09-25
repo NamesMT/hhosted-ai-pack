@@ -83,16 +83,27 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 
 ## 🩹 Why `postinstall` patches 9router
 
-`scripts/patch-9router.js` rewrites two things in 9router's bundled chunks, idempotently:
+`scripts/patch-9router.js` rewrites three things in 9router's bundled chunks, idempotently:
 
-- **`deepseek-v4p1-flash`** — the capability table knows `deepseek-v4.1-flash`, so this alias falls
-  through to a generic `*deepseek-v4*` pattern and silently loses `vision`.
+- **`vision` for the deepseek ids** — a model with no exact capability entry is resolved through an
+  ordered glob list, and 0.5.75's `*deepseek-v4*` entry carries `reasoning` without `vision`, so
+  `deepseek-v4.1-flash` and its `deepseek-v4p1-flash` alias both report `vision: false` and refuse
+  image input. The patch inserts a vision-carrying pattern for each id *ahead* of the generic one,
+  and also clones the exact-table entry into the alias.
 - **the process-safety fix** from [9router#4294](https://github.com/decolua/9router/pull/4294)
   ([issue #4295](https://github.com/decolua/9router/issues/4295)): `killProcessOnPort()` killed the
   first pid `lsof` handed it — clients included — and the panel health-checks that port, so restarting
-  the router used to take the panel down with it.
+  the router used to take the panel down with it. The sweep's "is this one of ours?" test was also
+  loose enough to match the *panel* itself — its path carries this folder's name
+  (`…/hhosted-9router-dsh/node_modules/home-hosted/dist/cli.js`) — so it is anchored to a real
+  `9router` package path now.
 
-`pnpm run patch:9router` re-applies both by hand.
+`pnpm run patch:9router` re-applies them by hand, `pnpm run check:patch` fails if one is missing, and
+`pnpm run test:patch` covers the matcher.
+
+> [!NOTE]
+> `9router` is pinned to an exact `0.5.75` instead of a range: the later `0.5.x` releases regressed,
+> and the patch is written against this build.
 
 ---
 

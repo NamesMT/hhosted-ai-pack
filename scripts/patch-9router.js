@@ -8,7 +8,14 @@ import fs from 'node:fs'
  *    `vision: true`). Only objects carrying `vision:` are cloned, so pricing tables and provider
  *    model lists are untouched.
  *
- * 2. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
+ * 2. Vision for the deepseek ids (`GENERIC_CAPS_PATTERN`): a model with no exact capability entry
+ *    is resolved through an ordered glob pattern list, and 0.5.75's `*deepseek-v4*` entry declares
+ *    `reasoning` without `vision` — so `deepseek-v4.1-flash` and its `deepseek-v4p1-flash` alias
+ *    both report `vision: false` and refuse image input. This inserts a vision-carrying pattern for
+ *    each id ahead of the generic one. A release whose generic pattern already has `vision:` needs
+ *    nothing, and the patch then leaves the list alone.
+ *
+ * 3. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
  *    Its stale-process sweep takes a pid from the second whitespace token of a matched `ps` line,
  *    and `killProcessOnPort()` runs `lsof -ti:<port>` — which lists *clients* as well as
  *    listeners — then kills the first pid. A supervisor that health-checks that port is such a
@@ -29,6 +36,14 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url))
 const ALIASES = [
   { from: 'deepseek-v4.1-flash', to: 'deepseek-v4p1-flash' },
 ]
+
+/**
+ * The caps-pattern list is matched in order and the first hit wins, so the two deepseek ids
+ * need their own entries *before* the generic one they fall through to. 0.5.75's
+ * `*deepseek-v4*` carries `reasoning` but no `vision`, which is the capability both ids lose.
+ */
+const GENERIC_CAPS_PATTERN = '*deepseek-v4*'
+const VISION_CAPS_PATTERNS = ['*deepseek-v4.1-flash*', '*deepseek-v4p1-flash*']
 
 const BUNDLE_DIR = ['app', '.next-cli-build']
 const VENDOR_MODULE = ['patches', 'processScan.cjs']
@@ -109,6 +124,30 @@ function capabilityBody(source, id) {
       return match[1]
   }
   return null
+}
+
+/**
+ * Adds a vision-carrying pattern for each deepseek id ahead of the generic one.
+ *
+ * The lookup walks the list in order and returns on the first hit, so position is the whole
+ * point: the specific entries have to sit before `*deepseek-v4*` to ever be reached. Idempotent,
+ * and a no-op on a release whose generic pattern already declares `vision:`.
+ */
+function patchCapPatterns(source) {
+  const generic = new RegExp(`\\{pattern:"${escapeRegExp(GENERIC_CAPS_PATTERN)}",caps:(\\{[^{}]*\\})\\}`)
+  const match = generic.exec(source)
+  if (match === null)
+    return { source, changed: false }
+
+  // Already inserted by a previous run, or upstream grew the capability itself.
+  if (source.includes(`{pattern:"${VISION_CAPS_PATTERNS[0]}"`) || match[1].includes('vision:'))
+    return { source, changed: false }
+
+  const caps = `{vision:!0,${match[1].slice(1)}`
+  const inserted = VISION_CAPS_PATTERNS
+    .map(pattern => `{pattern:"${pattern}",caps:${caps}},`)
+    .join('')
+  return { source: source.replace(match[0], `${inserted}${match[0]}`), changed: true }
 }
 
 const REQUIRE_ANCHOR = 'const { ensureTrayRuntime } = require("./hooks/trayRuntime");'
@@ -215,31 +254,48 @@ if (files.length === 0) {
 
 const { from, to } = ALIASES[0]
 const pending = []
+const aliasFiles = []
+const patternFiles = []
 const unpatched = []
 let capabilityFiles = 0
+let patternTables = 0
 let occurrences = 0
 
 for (const file of files) {
   const original = fs.readFileSync(file, 'utf8')
-  if (!original.includes(`"${from}"`))
-    continue
+  let source = original
 
-  const originalBody = capabilityBody(original, from)
-  if (originalBody === null)
-    continue
-  capabilityFiles++
-
-  const { source, patched, skipped } = patchSource(original)
-  if (patched > 0) {
-    occurrences += patched
-    pending.push({ file, content: source })
+  // The caps pattern list is what resolves a model that has no exact capability entry.
+  if (original.includes(`pattern:"${GENERIC_CAPS_PATTERN}"`)) {
+    patternTables++
+    const patterns = patchCapPatterns(source)
+    if (patterns.changed) {
+      source = patterns.source
+      patternFiles.push(path.relative(routerDir, file))
+    }
   }
-  if (skipped > 0 && capabilityBody(original, to) !== originalBody)
-    unpatched.push(path.relative(routerDir, file))
+
+  if (original.includes(`"${from}"`)) {
+    const originalBody = capabilityBody(original, from)
+    if (originalBody !== null) {
+      capabilityFiles++
+      const aliased = patchSource(source)
+      if (aliased.patched > 0) {
+        occurrences += aliased.patched
+        source = aliased.source
+        aliasFiles.push(path.relative(routerDir, file))
+      }
+      if (aliased.skipped > 0 && capabilityBody(original, to) !== originalBody)
+        unpatched.push(path.relative(routerDir, file))
+    }
+  }
+
+  if (source !== original)
+    pending.push({ file, content: source })
 }
 
-if (capabilityFiles === 0) {
-  console.error(`[patch:9router] found no "${from}" capability table — 9router layout changed.`)
+if (capabilityFiles === 0 && patternTables === 0) {
+  console.error(`[patch:9router] found neither a "${from}" capability table nor the caps pattern list — 9router layout changed.`)
   process.exit(optional ? 0 : 1)
 }
 
@@ -266,10 +322,14 @@ else {
 
 if (checkOnly) {
   let failed = false
-  if (pending.length > 0) {
+  if (aliasFiles.length > 0) {
     failed = true
-    console.error(`[patch:9router] alias "${to}" missing in ${pending.length} file(s):`)
-    for (const { file } of pending) console.error(`  - ${path.relative(routerDir, file)}`)
+    console.error(`[patch:9router] alias "${to}" missing in ${aliasFiles.length} file(s):`)
+    for (const file of aliasFiles) console.error(`  - ${file}`)
+  }
+  if (patternFiles.length > 0) {
+    failed = true
+    console.error(`[patch:9router] vision missing from the caps pattern list in: ${patternFiles.join(', ')}`)
   }
   if (unpatched.length > 0) {
     failed = true
@@ -287,7 +347,7 @@ if (checkOnly) {
     console.error('[patch:9router] run `pnpm run patch:9router` to apply')
     process.exit(1)
   }
-  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s) and the process-safety patch are in place`)
+  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list and the process-safety patch are in place`)
   process.exit(0)
 }
 
@@ -300,7 +360,8 @@ if (safety.problems.length > 0)
   console.error(`[patch:9router] process safety: ${safety.problems.join('; ')}`)
 
 console.log(
-  `[patch:9router] ${occurrences} occurrence(s) across ${pending.length} file(s); `
+  `[patch:9router] ${occurrences} alias occurrence(s) in ${aliasFiles.length} file(s); `
   + `${capabilityFiles} capability file(s) verified ("${from}" -> "${to}"); `
+  + `vision caps pattern added in ${patternFiles.length} file(s); `
   + `process safety: ${safety.writes.length} file(s) written`,
 )
