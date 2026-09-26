@@ -167,8 +167,8 @@ importers:
   .:
     dependencies:
       9router:
-        specifier: 0.5.75
-        version: 0.5.75
+        specifier: 0.5.91
+        version: 0.5.91
       '@deepseek-ai/dsh':
         specifier: ~0.1.7-rc.2
         version: 0.1.7-rc.2(3b90f4521ea2b77465cfaff3084a8d7b)
@@ -181,8 +181,8 @@ importers:
 
 packages:
 
-  9router@0.5.75:
-    resolution: {integrity: sha512-dyFdRBvDZT48nFCr0Du48phnKMIDOuSE0Q0VSk8xTXyaSNpRUaJ0K8y2JELcRuTkY1tXwuuUqOm5i6ZNZLB48Q==}
+  9router@0.5.91:
+    resolution: {integrity: sha512-Iok7UpqHcb8RF80z6oCRaEmzvZMc3RHdT2gUjFwFXvZM9Qry8odJn/oH4RmCk0oE1o9VaIYT1tgLEfSAGQPcJA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -9119,7 +9119,7 @@ packages:
 
 snapshots:
 
-  9router@0.5.75:
+  9router@0.5.91:
     dependencies:
       enquirer: 2.4.1
       node-forge: 1.4.0

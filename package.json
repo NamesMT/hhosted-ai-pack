@@ -19,10 +19,10 @@
     "postinstall": "node scripts/patch-9router.js --optional",
     "patch:9router": "node scripts/patch-9router.js",
     "check:patch": "node scripts/patch-9router.js --check",
-    "test:patch": "node --test scripts/patches/processScan.test.cjs"
+    "test:patch": "node --test scripts/patches/*.test.cjs scripts/patches/*.test.js"
   },
   "dependencies": {
-    "9router": "0.5.75",
+    "9router": "0.5.91",
     "@deepseek-ai/dsh": "~0.1.7-rc.2",
     "home-hosted": "^0.4.1",
     "omniroute": "^3.8.50"
