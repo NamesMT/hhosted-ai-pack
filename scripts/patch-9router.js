@@ -9,13 +9,19 @@ import fs from 'node:fs'
  *    model lists are untouched.
  *
  * 2. Vision for the deepseek ids (`GENERIC_CAPS_PATTERN`): a model with no exact capability entry
- *    is resolved through an ordered glob pattern list, and 0.5.75's `*deepseek-v4*` entry declares
+ *    is resolved through an ordered glob pattern list, and the `*deepseek-v4*` entry declares
  *    `reasoning` without `vision` — so `deepseek-v4.1-flash` and its `deepseek-v4p1-flash` alias
  *    both report `vision: false` and refuse image input. This inserts a vision-carrying pattern for
  *    each id ahead of the generic one. A release whose generic pattern already has `vision:` needs
  *    nothing, and the patch then leaves the list alone.
  *
- * 3. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
+ * 3. Account-scoped 4xx: 0.5.81's `checkFallbackError` hands any 4xx that matched no rule straight
+ *    back to the client, so a provider holding several keys stops falling back the moment one key
+ *    answers a 412 (Fireworks: "account is suspended"). The gate ships minified; it is rewritten to
+ *    the request-scoped allowlist (400/405/406/413/414/415/422) that upstream's fix uses. A release
+ *    whose gate is already that allowlist matches nothing and is left alone.
+ *
+ * 4. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
  *    Its stale-process sweep takes a pid from the second whitespace token of a matched `ps` line,
  *    and `killProcessOnPort()` runs `lsof -ti:<port>` — which lists *clients* as well as
  *    listeners — then kills the first pid. A supervisor that health-checks that port is such a
@@ -30,6 +36,7 @@ import { createRequire } from 'node:module'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { patchFallbackGuard } from './patches/fallbackGuard.js'
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url))
 
@@ -39,8 +46,8 @@ const ALIASES = [
 
 /**
  * The caps-pattern list is matched in order and the first hit wins, so the two deepseek ids
- * need their own entries *before* the generic one they fall through to. 0.5.75's
- * `*deepseek-v4*` carries `reasoning` but no `vision`, which is the capability both ids lose.
+ * need their own entries *before* the generic one they fall through to. The
+ * `*deepseek-v4*` entry carries `reasoning` but no `vision`, which is the capability both ids lose.
  */
 const GENERIC_CAPS_PATTERN = '*deepseek-v4*'
 const VISION_CAPS_PATTERNS = ['*deepseek-v4.1-flash*', '*deepseek-v4p1-flash*']
@@ -256,9 +263,12 @@ const { from, to } = ALIASES[0]
 const pending = []
 const aliasFiles = []
 const patternFiles = []
+const guardFiles = []
 const unpatched = []
 let capabilityFiles = 0
 let patternTables = 0
+let fallbackModuleFiles = 0
+let guardOccurrences = 0
 let occurrences = 0
 
 for (const file of files) {
@@ -287,6 +297,17 @@ for (const file of files) {
       }
       if (aliased.skipped > 0 && capabilityBody(original, to) !== originalBody)
         unpatched.push(path.relative(routerDir, file))
+    }
+  }
+
+  // Account fallback for account-scoped 4xx.
+  if (original.includes('shouldFallback:!1')) {
+    fallbackModuleFiles++
+    const guard = patchFallbackGuard(source)
+    if (guard.changed) {
+      guardOccurrences += guard.count
+      source = guard.source
+      guardFiles.push(path.relative(routerDir, file))
     }
   }
 
@@ -335,6 +356,15 @@ if (checkOnly) {
     failed = true
     console.error(`[patch:9router] alias present but with different capabilities in: ${unpatched.join(', ')}`)
   }
+  if (guardFiles.length > 0) {
+    failed = true
+    console.error(`[patch:9router] account-scoped 4xx still breaks the fallback in ${guardFiles.length} file(s):`)
+    for (const file of guardFiles) console.error(`  - ${file}`)
+  }
+  if (fallbackModuleFiles === 0) {
+    failed = true
+    console.error('[patch:9router] no account-fallback module in the bundle — 9router layout changed.')
+  }
   if (safety.problems.length > 0) {
     failed = true
     console.error(`[patch:9router] process safety: ${safety.problems.join('; ')}`)
@@ -347,7 +377,10 @@ if (checkOnly) {
     console.error('[patch:9router] run `pnpm run patch:9router` to apply')
     process.exit(1)
   }
-  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list and the process-safety patch are in place`)
+  const fallback = guardFiles.length === 0 && fallbackModuleFiles > 0
+    ? `account fallback in ${fallbackModuleFiles} file(s)`
+    : `account fallback patched in ${guardFiles.length} file(s)`
+  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list, ${fallback} and the process-safety patch are in place`)
   process.exit(0)
 }
 
@@ -363,5 +396,7 @@ console.log(
   `[patch:9router] ${occurrences} alias occurrence(s) in ${aliasFiles.length} file(s); `
   + `${capabilityFiles} capability file(s) verified ("${from}" -> "${to}"); `
   + `vision caps pattern added in ${patternFiles.length} file(s); `
+  + `account fallback: ${guardOccurrences} guard(s) in ${guardFiles.length} file(s) `
+  + `of ${fallbackModuleFiles} carrying the module; `
   + `process safety: ${safety.writes.length} file(s) written`,
 )

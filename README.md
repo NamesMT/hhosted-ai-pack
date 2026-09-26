@@ -83,14 +83,18 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 
 ## 🩹 Why `postinstall` patches 9router
 
-`scripts/patch-9router.js` rewrites three things in 9router's bundled chunks, idempotently:
+`scripts/patch-9router.js` rewrites four things in 9router's bundled chunks, idempotently:
 
 - **Capability aliases** — a model id that only differs from a known one still inherits its
   capabilities (`deepseek-v4p1-flash` ← `deepseek-v4.1-flash`). Only objects carrying `vision:` are
   cloned, so pricing tables and provider model lists are untouched.
-- **`vision` for the deepseek ids** — 0.5.75's `*deepseek-v4*` glob entry carries `reasoning` without
+- **`vision` for the deepseek ids** — the `*deepseek-v4*` glob entry carries `reasoning` without
   `vision`, so both ids report `vision: false` and refuse image input; a vision-carrying pattern is
   inserted ahead of the generic one.
+- **Account-scoped `4xx`** — 0.5.81 gated fallback on "any `4xx` that matched no rule", so a provider
+  holding several keys stopped falling back as soon as one key answered a `412` (Fireworks: *account is
+  suspended*). The gate is rewritten to the request-scoped allowlist, as upstream
+  [#4378](https://github.com/decolua/9router/pull/4378) does.
 - **Process safety** from [9router#4294](https://github.com/decolua/9router/pull/4294)
   ([#4295](https://github.com/decolua/9router/issues/4295)): `killProcessOnPort()` killed the first
   pid `lsof` returned — clients included — and the panel health-checks that port, so restarting the
@@ -98,11 +102,12 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
   itself, so it is anchored to a real `9router` package path now.
 
 `pnpm run patch:9router` re-applies them by hand, `pnpm run check:patch` fails if one is missing, and
-`pnpm run test:patch` covers the matcher.
+`pnpm run test:patch` covers the matchers.
 
 > [!NOTE]
-> `9router` is pinned to an exact `0.5.75`: versions above it currently regress **auto key fallback**,
-> and the patch is written against this build.
+> `9router` is pinned to an exact `0.5.91`: the patches are written against this build. The `4xx` fix
+> is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — the pin lifts once a release
+> carries it.
 
 ---
 
