@@ -13,9 +13,14 @@
     "down": "home-hosted down --home ./state",
     "restart": "home-hosted restart --home ./state",
     "status": "home-hosted status --home ./state",
+    "start": "home-hosted start --home ./state",
+    "stop": "home-hosted stop --home ./state",
     "set-password": "home-hosted set-password --home ./state",
     "set-token": "home-hosted set-token --home ./state",
     "migrate": "home-hosted migrate --home ./state",
+    "ui-switch": "home-hosted ui-switch --home ./state",
+    "ui-update": "home-hosted ui-update --home ./state",
+    "ui-revert": "home-hosted ui-revert --home ./state",
     "postinstall": "node scripts/patch-9router.js --optional",
     "patch:9router": "node scripts/patch-9router.js",
     "check:patch": "node scripts/patch-9router.js --check",
@@ -24,7 +29,7 @@
   "dependencies": {
     "9router": "0.5.91",
     "@deepseek-ai/dsh": "~0.1.7-rc.2",
-    "home-hosted": "^0.4.1",
+    "home-hosted": "^0.6.6",
     "omniroute": "^3.8.50"
   }
 }

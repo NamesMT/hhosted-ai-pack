@@ -24,7 +24,8 @@ pnpm run up     # panel + all three servers, detached
 
 **Fact**: the ports are partially derived from numpad keys: `43*67*` is *or*, `4*374*` is *dsh*.
 
-`pnpm run status` shows where everything is, `pnpm run down` stops the lot.
+`pnpm run status` shows where everything is, `pnpm run down` stops the lot, and `pnpm run start <id>` /
+`pnpm run stop <id>` move one server on its own.
 
 > [!NOTE]
 > The panel boots with the password `hh` — change it under **Settings → Authentication**.
