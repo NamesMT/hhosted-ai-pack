@@ -167,8 +167,8 @@ importers:
   .:
     dependencies:
       9router:
-        specifier: 0.5.91
-        version: 0.5.91
+        specifier: 0.5.95
+        version: 0.5.95
       '@deepseek-ai/dsh':
         specifier: ~0.1.7-rc.2
         version: 0.1.7-rc.2(3b90f4521ea2b77465cfaff3084a8d7b)
@@ -181,8 +181,8 @@ importers:
 
 packages:
 
-  9router@0.5.91:
-    resolution: {integrity: sha512-Iok7UpqHcb8RF80z6oCRaEmzvZMc3RHdT2gUjFwFXvZM9Qry8odJn/oH4RmCk0oE1o9VaIYT1tgLEfSAGQPcJA==}
+  9router@0.5.95:
+    resolution: {integrity: sha512-qPTC6C1FSVbT60tASkWjcWyXI33Pc6+k2co4gcxULqHS/YFy27bOplMeXmGdajd+ZIQ5ZeJ9B2CqfDZUdJmIkQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5722,6 +5722,9 @@ packages:
   compute-scroll-into-view@3.1.1:
     resolution: {integrity: sha512-VRhuHOLoKYOy4UbilLbUzbYg93XLjv2PncJC50EuTWPA3gaja1UjBsUP/D/9/juV3vQFr6XBEzn9KCAHdUvOHw==}
 
+  confbox@0.2.4:
+    resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==}
+
   config-chain@1.1.13:
     resolution: {integrity: sha512-qj+f8APARXHrM0hraqXYb2/bOVSV4PvJQlNZ/DVj0QrmNM2q2euizkeuVckQ57J+W0mRH6Hvi+k50M4Jul2VRQ==}
 
@@ -9122,8 +9125,9 @@ packages:
 
 snapshots:
 
-  9router@0.5.91:
+  9router@0.5.95:
     dependencies:
+      confbox: 0.2.4
       enquirer: 2.4.1
       node-forge: 1.4.0
       node-machine-id: 1.1.12
@@ -15489,6 +15493,8 @@ snapshots:
       - supports-color
 
   compute-scroll-into-view@3.1.1: {}
+
+  confbox@0.2.4: {}
 
   config-chain@1.1.13:
     dependencies:

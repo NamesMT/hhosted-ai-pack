@@ -27,7 +27,7 @@
     "test:patch": "node --test scripts/patches/*.test.cjs scripts/patches/*.test.js"
   },
   "dependencies": {
-    "9router": "0.5.91",
+    "9router": "0.5.95",
     "@deepseek-ai/dsh": "~0.1.7-rc.2",
     "home-hosted": "^0.6.6",
     "omniroute": "^3.8.50"

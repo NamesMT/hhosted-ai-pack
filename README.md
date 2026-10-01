@@ -84,7 +84,7 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 
 ## 🩹 Why `postinstall` patches 9router
 
-`scripts/patch-9router.js` rewrites four things in 9router's bundled chunks, idempotently:
+`scripts/patch-9router.js` rewrites these in 9router's bundled chunks, idempotently:
 
 - **Capability aliases** — a model id that only differs from a known one still inherits its
   capabilities (`deepseek-v4p1-flash` ← `deepseek-v4.1-flash`). Only objects carrying `vision:` are
@@ -96,6 +96,13 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
   holding several keys stopped falling back as soon as one key answered a `412` (Fireworks: *account is
   suspended*). The gate is rewritten to the request-scoped allowlist, as upstream
   [#4378](https://github.com/decolua/9router/pull/4378) does.
+- **New keys land last** — the Add API Key modal hardcodes `priority: 1` for both single and bulk
+  adds, and the pool is served in ascending priority, so a fresh key was tried *before* the working
+  ones. The next free priority (`MAX(priority) + 1`) is derived inside the modal instead.
+- **Select Errors** — a toolbar button that selects every connection whose last test failed
+  (`testStatus: "error"`), so a broken batch is one click to delete or re-test.
+- **Test Connections Async** — the shipped runner walks the pool one key at a time with a 1s sleep;
+  this adds a second button that tests 10 at a time, with the same progress banner and Stop.
 - **Process safety** from [9router#4294](https://github.com/decolua/9router/pull/4294)
   ([#4295](https://github.com/decolua/9router/issues/4295)): `killProcessOnPort()` killed the first
   pid `lsof` returned — clients included — and the panel health-checks that port, so restarting the
@@ -106,9 +113,11 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 `pnpm run test:patch` covers the matchers.
 
 > [!NOTE]
-> `9router` is pinned to an exact `0.5.91`: the patches are written against this build. The `4xx` fix
-> is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — the pin lifts once a release
-> carries it.
+> `9router` is pinned to an exact `0.5.95`: the patches are written against this build. The dashboard
+> ones anchor on the minified client chunk only — the server-rendered twin is minified differently and
+> is left alone, which `patch:9router` reports as a skipped copy.
+> The `4xx` fix is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — the pin lifts
+> once a release carries it.
 
 ---
 

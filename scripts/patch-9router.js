@@ -37,6 +37,7 @@ import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { patchFallbackGuard } from './patches/fallbackGuard.js'
+import { patchProviderPage } from './patches/providerPage.js'
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url))
 
@@ -265,6 +266,9 @@ const aliasFiles = []
 const patternFiles = []
 const guardFiles = []
 const unpatched = []
+const providerPageFiles = []
+const providerPageProblems = []
+let providerPagePatched = 0
 let capabilityFiles = 0
 let patternTables = 0
 let fallbackModuleFiles = 0
@@ -308,6 +312,22 @@ for (const file of files) {
       guardOccurrences += guard.count
       source = guard.source
       guardFiles.push(path.relative(routerDir, file))
+    }
+  }
+
+  // Provider detail page: new keys land last, Select Errors, and the async test run.
+  if (original.includes('Test Connection One-by-One')) {
+    if (original.includes('Test Connections Async'))
+      providerPagePatched++
+    const page = patchProviderPage(source)
+    if (page.changed) {
+      source = page.source
+      providerPageFiles.push(path.relative(routerDir, file))
+    }
+    else if (page.missing.length > 0) {
+      // The server-rendered twin is minified with a different naming scheme, so the anchors only
+      // match the client chunk. It is reported, not failed on: the client chunk is what hydrates.
+      providerPageProblems.push(`${path.relative(routerDir, file)} (${page.missing.length} anchor(s) not in this copy)`)
     }
   }
 
@@ -361,6 +381,11 @@ if (checkOnly) {
     console.error(`[patch:9router] account-scoped 4xx still breaks the fallback in ${guardFiles.length} file(s):`)
     for (const file of guardFiles) console.error(`  - ${file}`)
   }
+  if (providerPagePatched === 0) {
+    failed = true
+    console.error('[patch:9router] provider page not patched — 9router layout changed.')
+    for (const file of providerPageProblems) console.error(`  - ${file}`)
+  }
   if (fallbackModuleFiles === 0) {
     failed = true
     console.error('[patch:9router] no account-fallback module in the bundle — 9router layout changed.')
@@ -380,7 +405,7 @@ if (checkOnly) {
   const fallback = guardFiles.length === 0 && fallbackModuleFiles > 0
     ? `account fallback in ${fallbackModuleFiles} file(s)`
     : `account fallback patched in ${guardFiles.length} file(s)`
-  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list, ${fallback} and the process-safety patch are in place`)
+  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list, ${fallback}, the provider page (keys last, Select Errors, async test) and the process-safety patch are in place`)
   process.exit(0)
 }
 
@@ -398,5 +423,7 @@ console.log(
   + `vision caps pattern added in ${patternFiles.length} file(s); `
   + `account fallback: ${guardOccurrences} guard(s) in ${guardFiles.length} file(s) `
   + `of ${fallbackModuleFiles} carrying the module; `
+  + `provider page: ${providerPageFiles.length} file(s) written `
+  + `(${providerPageProblems.length} copy/copies skipped); `
   + `process safety: ${safety.writes.length} file(s) written`,
 )
