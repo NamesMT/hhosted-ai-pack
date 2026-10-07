@@ -4,7 +4,7 @@
 
 **A self-contained home AI pack: [OmniRoute](https://github.com/diegosouzapw/OmniRoute) and [9router](https://github.com/decolua/9router) as gateways, [dsh](https://www.npmjs.com/package/@deepseek-ai/dsh) as the agent harness, all kept alive by [home-hosted](https://github.com/NamesMT/home-hosted).**
 
-Three servers, one JSON file, one panel on <http://127.0.0.1:4399>.
+Three servers, one workspace, one panel on <http://127.0.0.1:4399>.
 
 </div>
 
@@ -48,16 +48,39 @@ setup: copy it, back it up, delete it whole.
 4. dsh's token URL, from its log:
 
    ```bash
-   grep -oE 'http://127\.0\.0\.1:4374/\?token=[A-Za-z0-9_-]+' state/.logs/dsh.log | tail -1
+   grep -oE 'http://127\.0\.0\.1:4374/\?token=[A-Za-z0-9_-]+' state/.hh/default/.logs/dsh.log | tail -1
    ```
 
 `autostart` brings all three back with the panel.
 
 ---
 
+## 🗂 State, one workspace per setup
+
+home-hosted 0.7 split its state into **workspaces**: a workspace owns its servers, settings, secrets,
+logs and nanny state, while the listener, auth, TLS, backups and the installed UI stay global.
+
+```text
+state/.hh/                  # global — settings.json, workspaces.json, .control-secrets.json, .ui/, run.json
+state/.hh/default/          # the workspace this pack uses
+    servers.config.json     #   the three entries below
+    settings.json           #   server defaults, logs, notifications, DDNS
+```
+
+Only the definitions are committed (`settings.json`, `workspaces.json`, and each
+`<workspace>/servers.config.json`/`settings.json`); secrets, logs, TLS keys, backups and `run.json`
+stay out. A pre-0.7 `state/` is relocated by `pnpm run migrate`.
+
+```bash
+pnpm run migrate --dry-run   # print the steps, write nothing
+pnpm run migrate             # ask, then write — a .bak sits beside each rewritten file
+```
+
+---
+
 ## 🔌 The three entries
 
-`state/servers.config.json` is the whole setup:
+`state/.hh/default/servers.config.json` is the whole setup:
 
 | entry | port | bind | data directory |
 | --- | --- | --- | --- |
@@ -118,6 +141,23 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 > is left alone, which `patch:9router` reports as a skipped copy.
 > The `4xx` fix is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — the pin lifts
 > once a release carries it.
+
+---
+
+## 🔌 dsh 0.2 gates profile plugins
+
+dsh 0.2 preflights every profile bundle against its own version and **disables** one whose
+`@deepseek-ai/dsh*` peer range rejects the runtime — logging `dsh: skipping profile bundle "<name>"`
+and carrying on without it. The profile's `dshmarket` sat at `1.65.1`, whose
+`@deepseek-ai/dsh-settings` peer stops at `^0.1.2-alpha.2`, so the market plugin vanished from the
+UI; `1.66.4`+ accepts `^0.2.0-rc.1`. Update the plugin, not the entry:
+
+```bash
+DSH_HOME="$PWD/data/.dsh" dsh plugin --profile web update dshmarket
+```
+
+The `dsh` entry needs no change for 0.2: `web`, `--port`, `--host`, `--no-open` and a repeatable
+`--trusted-host` are unchanged, and `sessions/`, `storages/` and `profiles/` are read as-is.
 
 ---
 
