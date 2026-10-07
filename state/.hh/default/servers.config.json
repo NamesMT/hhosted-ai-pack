@@ -1,31 +1,8 @@
 {
   "$schema": "./servers.config.schema.json",
   "meta": {
-    "writtenBy": "0.4.0",
+    "writtenBy": "0.7.18",
     "schema": 1
-  },
-  "control": {
-    "port": 4399,
-    "host": "local",
-    "openBrowser": false,
-    "auth": {
-      "enabled": true
-    },
-    "label": "Home AI pack"
-  },
-  "defaults": {
-    "enabled": true,
-    "autostart": false,
-    "bind": "local",
-    "onPortConflict": "block",
-    "health": {
-      "http": {
-        "path": "/",
-        "method": "GET",
-        "expectStatusBelow": 400,
-        "expectBody": ""
-      }
-    }
   },
   "servers": [
     {
@@ -146,8 +123,5 @@
       },
       "onPortConflict": "follow"
     }
-  ],
-  "backups": {
-    "includePaths": []
-  }
+  ]
 }

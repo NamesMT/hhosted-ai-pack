@@ -1,0 +1,20 @@
+{
+  "$schema": "./settings.schema.json",
+  "meta": {
+    "writtenBy": "0.7.18",
+    "schema": 1
+  },
+  "control": {
+    "port": 4399,
+    "host": "local",
+    "openBrowser": false,
+    "auth": {
+      "enabled": true
+    },
+    "label": "Home AI pack"
+  },
+  "host": {},
+  "backups": {
+    "includePaths": []
+  }
+}

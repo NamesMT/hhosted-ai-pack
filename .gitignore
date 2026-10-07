@@ -1,11 +1,21 @@
 node_modules/
 
-# Tracked: the server definitions, and a UI uploaded through Settings → Interface, so a
-# clone (or a backup) keeps the panel the way it was set up. home-hosted's own state
-# (secrets, logs, backups) stays out, and the servers it supervises write into data/.
-state/*
-!state/servers.config.json
-!state/.ui/
+# Tracked: the workspace definitions — which servers exist, in which workspace, and the
+# UI uploaded through Settings → Interface — so a clone (or a backup) keeps the panel the
+# way it was set up. Everything else home-hosted owns (secrets, logs, TLS keys, backups,
+# run.json) stays out, and the servers it supervises write into data/.
+#
+# `!state/.hh/*/` keeps the workspace directories walkable: git cannot re-include a file
+# whose parent directory it excluded, so the servers file needs its directory back first.
+state/.hh/*
+!state/.hh/settings.json
+!state/.hh/workspaces.json
+!state/.hh/.ui/
+!state/.hh/*/
+state/.hh/*/*
+!state/.hh/*/settings.json
+!state/.hh/*/servers.config.json
+!state/.hh/.ui/**
 data/
 
 # pnpm's virtual store bookkeeping

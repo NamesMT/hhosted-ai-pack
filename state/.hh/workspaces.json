@@ -1,0 +1,9 @@
+{
+  "$schema": "./workspaces.schema.json",
+  "workspaces": [
+    {
+      "id": "default",
+      "label": "Default"
+    }
+  ]
+}

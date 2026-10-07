@@ -1,0 +1,24 @@
+{
+  "$schema": "./settings.schema.json",
+  "meta": {
+    "writtenBy": "0.7.18",
+    "schema": 1
+  },
+  "defaults": {
+    "enabled": true,
+    "autostart": false,
+    "bind": "local",
+    "onPortConflict": "block",
+    "health": {
+      "http": {
+        "path": "/",
+        "method": "GET",
+        "expectStatusBelow": 400,
+        "expectBody": ""
+      }
+    }
+  },
+  "logs": {},
+  "notifications": {},
+  "ddns": {}
+}
