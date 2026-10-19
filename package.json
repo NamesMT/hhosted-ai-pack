@@ -9,27 +9,27 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "up": "home-hosted up --home ./state",
-    "down": "home-hosted down --home ./state",
-    "restart": "home-hosted restart --home ./state",
-    "status": "home-hosted status --home ./state",
-    "start": "home-hosted start --home ./state",
-    "stop": "home-hosted stop --home ./state",
-    "set-password": "home-hosted set-password --home ./state",
-    "set-token": "home-hosted set-token --home ./state",
-    "migrate": "home-hosted migrate --home ./state",
-    "ui-switch": "home-hosted ui-switch --home ./state",
-    "ui-update": "home-hosted ui-update --home ./state",
-    "ui-revert": "home-hosted ui-revert --home ./state",
+    "up": "home-hosted up --home ./state --project .",
+    "down": "home-hosted down --home ./state --project .",
+    "restart": "home-hosted restart --home ./state --project .",
+    "status": "home-hosted status --home ./state --project .",
+    "start": "home-hosted start --home ./state --project .",
+    "stop": "home-hosted stop --home ./state --project .",
+    "set-password": "home-hosted set-password --home ./state --project .",
+    "set-token": "home-hosted set-token --home ./state --project .",
+    "migrate": "home-hosted migrate --home ./state --project .",
+    "ui-switch": "home-hosted ui-switch --home ./state --project .",
+    "ui-update": "home-hosted ui-update --home ./state --project .",
+    "ui-revert": "home-hosted ui-revert --home ./state --project .",
     "postinstall": "node scripts/patch-9router.js --optional",
     "patch:9router": "node scripts/patch-9router.js",
     "check:patch": "node scripts/patch-9router.js --check",
     "test:patch": "node --test scripts/patches/*.test.cjs scripts/patches/*.test.js"
   },
   "dependencies": {
-    "9router": "0.5.95",
+    "9router": "0.5.104",
     "@deepseek-ai/dsh": "~0.2.0-rc.2",
-    "home-hosted": "^0.7.18",
+    "home-hosted": "^0.9.2",
     "omniroute": "^3.8.50"
   }
 }

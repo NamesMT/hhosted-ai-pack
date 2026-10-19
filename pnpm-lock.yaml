@@ -167,22 +167,22 @@ importers:
   .:
     dependencies:
       9router:
-        specifier: 0.5.95
-        version: 0.5.95
+        specifier: 0.5.104
+        version: 0.5.104
       '@deepseek-ai/dsh':
         specifier: ~0.2.0-rc.2
         version: 0.2.0-rc.2(450226f01a006f87d93fa66e32d3e97f)
       home-hosted:
-        specifier: ^0.7.18
-        version: 0.7.18(supports-color@7.2.0)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+        specifier: ^0.9.2
+        version: 0.9.2(supports-color@7.2.0)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       omniroute:
         specifier: ^3.8.50
         version: 3.8.50(@lobehub/ui@5.49.0)(@mdx-js/mdx@3.1.1(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/node@26.6.2)(@types/react@19.3.0)(antd@6.6.5(luxon@3.7.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(babel-plugin-macros@3.1.0)(debug@4.4.3(supports-color@7.2.0))(immer@11.1.18)(redux@5.0.1)(supports-color@7.2.0)(use-sync-external-store@1.7.0(react@19.2.8))
 
 packages:
 
-  9router@0.5.95:
-    resolution: {integrity: sha512-qPTC6C1FSVbT60tASkWjcWyXI33Pc6+k2co4gcxULqHS/YFy27bOplMeXmGdajd+ZIQ5ZeJ9B2CqfDZUdJmIkQ==}
+  9router@0.5.104:
+    resolution: {integrity: sha512-hP1e7tXOFyB06cDAiWgNpdPz3b9cUjWVEEjWeb5YhehMmACFBuqK7lmKKkeHqWY1qkng5YSIcmWzdjG+R9pAVA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -245,11 +245,11 @@ packages:
       zod:
         optional: true
 
-  '@ark/schema@0.56.2':
-    resolution: {integrity: sha512-Qx4D2JFbBWpntiHZaTv7bGG4H/M2rigiknezKg/WVyDSaLdE4YCcWAOoFB7pjjDqHbbV2OqRfntm1nnXvwMexg==}
+  '@ark/schema@0.56.7':
+    resolution: {integrity: sha512-jmoOJlYIc4k1uv8oYBDNOFnAsKk2a2D9t/D6npF2JUfW4ecPB0v6ce6lruKg7lkBxIBA8Z7UtxfmvephYbhUGQ==}
 
-  '@ark/util@0.56.2':
-    resolution: {integrity: sha512-9kU2sUE38FZEGG7l3hamYMBieLYEJh2L1mrYD2eXpT+78EnQSV1bhjxJhnxGBMSTbtwpBSDNSK+K60WvaI/DTQ==}
+  '@ark/util@0.56.7':
+    resolution: {integrity: sha512-z8pVnrPk/x9GC18yOp5wCe8rR2+Z6us4CTSg7dvxdsDLuA2xXYq+QETD1fO6f3fMuXe+PCjpvtCnhTW9RHLgEw==}
 
   '@atjsh/llmlingua-2@3.0.0':
     resolution: {integrity: sha512-SpRg3zzjATSTjbJV/3ldzDGba0yFjlcnCZ0x3QPJnrUm13PHCvlhwKlgET+BAM5SHFD3n6BsFTwsZUxDBwOyDw==}
@@ -3576,8 +3576,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@namesmt/utils@0.5.20':
-    resolution: {integrity: sha512-CPhNvxC5E8SzBCBordPYvR7TY8NqM12o4/Clx5FPUsHEwZVtpGIo7Fl4c5x06ueKcSf60RUqHJbhFXmUkSISAA==}
+  '@namesmt/utils@0.5.21':
+    resolution: {integrity: sha512-NGter5A6SAQVsRzbt13Dmfoy+eXgDeYwbfZ9WHOTcMReqaLJ8K05GCkwlg2QKTgvga/zd5dK/qKelPHavBz/pg==}
     engines: {node: '>=22.0.0'}
 
   '@next/env@16.3.1':
@@ -4692,30 +4692,30 @@ packages:
       react-redux:
         optional: true
 
-  '@scalar/client-side-rendering@0.4.3':
-    resolution: {integrity: sha512-a7Hs+YpaT3CEtJcx6pJS/1XMhV/cCGmheYrwuCd51LvrnJLluVqq7ID6F9xWqPnc7Y0E3vs6XZcz+h3exjUFdg==}
+  '@scalar/client-side-rendering@0.4.12':
+    resolution: {integrity: sha512-FjzUNhDgMlrIqANp3Lj/2XuRoSL8glyueE6Qc62Y1HzNQEEmk2pmdCTAfrN7bU9L49X5qtNAn3KZdL8ng1taBw==}
     engines: {node: '>=22'}
 
-  '@scalar/helpers@0.13.0':
-    resolution: {integrity: sha512-1vB6AZXCQZPb+MApSrso6ss+rbLuiI/vGe+PmiXm8Cnt6B+10JeacDPoPr51EgSwltSfH2hZhJ7hHjW2pSg+bQ==}
+  '@scalar/helpers@0.16.4':
+    resolution: {integrity: sha512-9eILWzUcAkHEuYMMvijpSIy69t+Vkq+NudLB/7lgARFTWqXfQpIxW1L3VH7ogKyRie5+E4CNZ3PSvlw6IIfLGw==}
     engines: {node: '>=22'}
 
-  '@scalar/hono-api-reference@0.12.4':
-    resolution: {integrity: sha512-/Srs98YbTAXKIyw2IdATKMyB/rz5oUrzP9uBkNIQo4bk5f9D7qywavtZFClCMZ0a7zvTzFsJeggaOPC+1qqOVg==}
+  '@scalar/hono-api-reference@0.12.13':
+    resolution: {integrity: sha512-jpjZWKckchyj1EPghvEgoKvP795q8er8WTU8seckmVSdVNS7CliAYqT29P4TBy4NKHih4O3/M69bxLU3jdgMbQ==}
     engines: {node: '>=22'}
     peerDependencies:
       hono: ^4.12.5
 
-  '@scalar/schemas@0.11.0':
-    resolution: {integrity: sha512-rtvZSsL7IFcHLB1j0VJIgW2MJ702NPOvlhRoRWU4gDK4rGDRmy58BzXtF7gbKOm8vA8aX24NIMr7itwc1Pp6AQ==}
+  '@scalar/schemas@0.14.0':
+    resolution: {integrity: sha512-tYNfeIOk/G5o/DiW2Yc2tFlNvE42Ls1aHUOQSSeFugjBgv53p3u3tlu7gA5N4uMaS8mQCumURusc/cb4RmiX2g==}
     engines: {node: '>=22'}
 
-  '@scalar/types@0.21.0':
-    resolution: {integrity: sha512-kl/GSKZ2DynaaP1LxnyXxopgoIYrtUI95cOeG3KYkdGJ6pEn3MJ6PDmWfRQNj3gH/ZRx2UuNIf3jVvtMNrlrKA==}
+  '@scalar/types@0.24.0':
+    resolution: {integrity: sha512-x4O8ddCvh+59zwh9Xc+bG2QACxYARcPDfJBYiUzD/hzSxb6vpcms+WKgMksBfYWCZneO6e5Kt6hZFBoE9D9YCg==}
     engines: {node: '>=22'}
 
-  '@scalar/validation@0.6.4':
-    resolution: {integrity: sha512-s93HFX0+N6bLwGjZPKFGVHq/gWiZy1YQkR2+dSflbUdYp+4j2Pg+WDA0gwbFrsOlgtkEjwQbjXtbmBiFTtPYUg==}
+  '@scalar/validation@0.6.7':
+    resolution: {integrity: sha512-xvmeYb0LOg9B598oVA/1fs9MvnMdtWjQYG3v2Wgftewizr7tQjsdDYT1TQahlDzqRG+r+ml6zlSkPrFiCE5jHQ==}
     engines: {node: '>=20'}
 
   '@schummar/icu-type-parser@1.21.5':
@@ -4819,8 +4819,8 @@ packages:
   '@stablelib/base64@1.0.1':
     resolution: {integrity: sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ==}
 
-  '@standard-community/standard-json@0.3.6':
-    resolution: {integrity: sha512-tuXKz1Ps4al0W4xhfwii7v4lskKtOv3QE7mcouRVThrBdOR6JzY4Vea3nsxcEnte84bOJvMvXGmOMWE3IBbHyA==}
+  '@standard-community/standard-json@0.3.7':
+    resolution: {integrity: sha512-9reHaeW6k99yMHCgqMnLZgrKGT/fxfwYCdzd8nM4gHL4ez8MO0AlC9seGXoJNVEaO5LiE7DVCKl46wNE4wVFRA==}
     peerDependencies:
       '@standard-schema/spec': ^1.0.0
       '@types/json-schema': ^7.0.15
@@ -4850,8 +4850,8 @@ packages:
       zod-to-json-schema:
         optional: true
 
-  '@standard-community/standard-openapi@0.2.10':
-    resolution: {integrity: sha512-whaCN9eu5zv5gu6Kyeh5am/S3AyS1nqo57/wAxs/KPS7+94UhBUZmkIetmXzm22qIV0zMrHt3y+2VfjkbkYYTA==}
+  '@standard-community/standard-openapi@0.2.11':
+    resolution: {integrity: sha512-Fz+2K6JMJZwf4QoyZrq1smK+YeEwDGXqz2j8Y77rOHgmrk9StcEyTKkMf3n/4xOmEup5WZ2eOp0xiC7Slxx9gg==}
     peerDependencies:
       '@standard-community/standard-json': ^0.3.5
       '@standard-schema/spec': ^1.0.0
@@ -5296,8 +5296,8 @@ packages:
   '@xyflow/system@0.0.82':
     resolution: {integrity: sha512-4DKnL3CGtCGLRSmgDqaajRVgeksMXq/Yw4wPfdMfm7JvdIiWHGzVYOfFUztiATwdBXZqUU6HhehwUdbV9G23PQ==}
 
-  '@zip.js/zip.js@2.17.0':
-    resolution: {integrity: sha512-WxvSsJvlI+5v4f1gWjGfqvzOB8XkAIughO+iJUPOJR6OSpUkFauBzi1G4xS2MmK1fxHGuDAqq9Lnpq/ri7BWuw==}
+  '@zip.js/zip.js@2.24.0':
+    resolution: {integrity: sha512-WlaVKzdqBK+RF3bdiXZWbdCnvGB6PdO4IHC1mn/2Yfl3bASgqUNegnU3+PNg61iecwoPfUi5BgLUPqBukXpyWw==}
     engines: {bun: '>=0.7.0', deno: '>=1.0.0', node: '>=18.0.0'}
 
   abort-controller@3.0.0:
@@ -5404,11 +5404,11 @@ packages:
     resolution: {integrity: sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==}
     engines: {node: '>=10'}
 
-  arkregex@0.0.8:
-    resolution: {integrity: sha512-PJcx6G1kQTgLKPUbeYlYecDRaKq15AMSGVajlKFYWlPeJRQL+j3dKE6tyMs40HZ99djS1l9Vhl3ezAHy9JBIqQ==}
+  arkregex@0.0.13:
+    resolution: {integrity: sha512-c17sqCqiiZauxyoU1KZ2zbzCgeghGmc8dR2CrdQnlEtpq3bLhRLoLrxTL52M/8yQD8e/i1/IBRpRCNAuqJa7xQ==}
 
-  arktype@2.2.3:
-    resolution: {integrity: sha512-7W+0RLTUNJiBFIIZXwOQxSR8Z273IAd6IvqBeG9+gHnQKFsIx2C0iOtGTmMrPnlX4qLXyc5+ll7A0BIj9WrbTg==}
+  arktype@2.2.8:
+    resolution: {integrity: sha512-tZyLza7kO2vN8BXBKcj4t43IVMe8/ZyqlITH0chZv7FfEw+edLovpY922tqcK4mCjTpf4oNo2xV6np7tquP1ww==}
 
   asn1js@3.0.10:
     resolution: {integrity: sha512-S2s3aOytiKdFRdulw2qPE51MzjzVOisppcVv7jVFR+Kw0kxwvFrDcYA0h7Ndqbmj0HkMIXYWaoj7fli8kgx1eg==}
@@ -6633,15 +6633,19 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  home-hosted@0.7.18:
-    resolution: {integrity: sha512-3FQyhFl3FmKGuEN1pf3VKA+9G4Jtq2ZZ8bcBa7/v5StHLqAiqKIh7qNv54BJIxysRK9k1ACV7+baFtZ84vha8w==}
+  home-hosted@0.9.2:
+    resolution: {integrity: sha512-s9r3KoVRykn+VmlOjv5ePeuD1wgqbuCTDOCEJjxPpf1iJndNs3YDOzvkv7CoK23/EZO+EJqqUWqOt1bKSsXpKw==}
     engines: {node: '>=24.0.0'}
     hasBin: true
 
-  hono-openapi@1.3.3:
-    resolution: {integrity: sha512-+LVFPQEc4eDrXr/Rd0QQkRh/DbEZRXnm1RZU4bVaoqmWiWgspT4nNHIQMgi44X+D9/8k1eGzHvR0KLNPJ/0xaQ==}
+  hono-openapi@1.5.0:
+    resolution: {integrity: sha512-7pRGQbFLBSy+SmCKHIZB3a8pzalnsYflvGRXyS1P7vucEGlkL23QitQ++wNCuMT25Q3TbGH2JUuTdYnWMY/GIw==}
     peerDependencies:
       hono: ^4.11.2
+
+  hono@4.13.13:
+    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+    engines: {node: '>=16.9.0'}
 
   hono@4.13.8:
     resolution: {integrity: sha512-/Gng7NfoykZl2pjukW5Z6+8Yxm3BPRf86GTbQnt0SbySkvax4fyL4H3HhY1cCpBGmiW9XDRFzRV+CXK2W8QudQ==}
@@ -8576,8 +8580,8 @@ packages:
   sqlite-vec@0.1.9:
     resolution: {integrity: sha512-L7XJWRIBNvR9O5+vh1FQ+IGkh/3D2AzVksW5gdtk28m78Hy8skFD0pqReKH1Yp0/BUKRGcffgKvyO/EON5JXpA==}
 
-  srvx@1.0.5:
-    resolution: {integrity: sha512-KvSKRpgPG/oaq3cyT614OQ2bAa7DynuGamivCZeoZzIUULOdbQz6wUtnnVuC4+DCx2Zglzo8v5gBYmWIWYhDxA==}
+  srvx@1.0.6:
+    resolution: {integrity: sha512-QeTKgAhk8OSsfeq60bl3wuVs9PmBftzmk7owBInA/F1YQne+TRw0UcPymNpURldAmx8hfmM2PNNGH/zgo3GpLA==}
     engines: {node: '>=20.16.0'}
     hasBin: true
 
@@ -8598,8 +8602,8 @@ packages:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
     engines: {node: '>= 0.8'}
 
-  std-env@4.2.0:
-    resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
+  std-env@4.3.0:
+    resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
 
   stdin-discarder@0.3.2:
     resolution: {integrity: sha512-eCPu1qRxPVkl5605OTWF8Wz40b4Mf45NY5LQmVPQ599knfs5QhASUm9GbJ5BDMDOXgrnh0wyEdvzmL//YMlw0A==}
@@ -9171,7 +9175,7 @@ packages:
 
 snapshots:
 
-  9router@0.5.95:
+  9router@0.5.104:
     dependencies:
       confbox: 0.2.4
       enquirer: 2.4.1
@@ -9249,11 +9253,11 @@ snapshots:
     optionalDependencies:
       zod: 4.6.5
 
-  '@ark/schema@0.56.2':
+  '@ark/schema@0.56.7':
     dependencies:
-      '@ark/util': 0.56.2
+      '@ark/util': 0.56.7
 
-  '@ark/util@0.56.2': {}
+  '@ark/util@0.56.7': {}
 
   '@atjsh/llmlingua-2@3.0.0(@huggingface/transformers@4.3.0(@types/node@26.6.2))(js-tiktoken@1.0.21)':
     dependencies:
@@ -13016,10 +13020,10 @@ snapshots:
     dependencies:
       hono: 4.13.8
 
-  '@hono/standard-validator@0.4.0(@standard-schema/spec@1.1.0)(hono@4.13.8)':
+  '@hono/standard-validator@0.4.0(@standard-schema/spec@1.1.0)(hono@4.13.13)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      hono: 4.13.8
+      hono: 4.13.13
 
   '@huggingface/jinja@0.5.10':
     optional: true
@@ -13466,7 +13470,7 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@namesmt/utils@0.5.20':
+  '@namesmt/utils@0.5.21':
     dependencies:
       '@antfu/utils': 9.3.0
       dequal: 2.0.3
@@ -14587,32 +14591,33 @@ snapshots:
       react: 19.2.8
       react-redux: 9.3.0(@types/react@19.3.0)(react@19.2.8)(redux@5.0.1)
 
-  '@scalar/client-side-rendering@0.4.3':
+  '@scalar/client-side-rendering@0.4.12':
     dependencies:
-      '@scalar/schemas': 0.11.0
-      '@scalar/types': 0.21.0
-      '@scalar/validation': 0.6.4
+      '@scalar/helpers': 0.16.4
+      '@scalar/schemas': 0.14.0
+      '@scalar/types': 0.24.0
+      '@scalar/validation': 0.6.7
 
-  '@scalar/helpers@0.13.0': {}
+  '@scalar/helpers@0.16.4': {}
 
-  '@scalar/hono-api-reference@0.12.4(hono@4.13.8)':
+  '@scalar/hono-api-reference@0.12.13(hono@4.13.13)':
     dependencies:
-      '@scalar/client-side-rendering': 0.4.3
-      hono: 4.13.8
+      '@scalar/client-side-rendering': 0.4.12
+      hono: 4.13.13
 
-  '@scalar/schemas@0.11.0':
+  '@scalar/schemas@0.14.0':
     dependencies:
-      '@scalar/helpers': 0.13.0
-      '@scalar/validation': 0.6.4
+      '@scalar/helpers': 0.16.4
+      '@scalar/validation': 0.6.7
 
-  '@scalar/types@0.21.0':
+  '@scalar/types@0.24.0':
     dependencies:
-      '@scalar/helpers': 0.13.0
+      '@scalar/helpers': 0.16.4
       nanoid: 5.1.16
       type-fest: 5.10.0
       zod: 4.6.5
 
-  '@scalar/validation@0.6.4': {}
+  '@scalar/validation@0.6.7': {}
 
   '@schummar/icu-type-parser@1.21.5': {}
 
@@ -14715,24 +14720,24 @@ snapshots:
 
   '@stablelib/base64@1.0.1': {}
 
-  '@standard-community/standard-json@0.3.6(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.3)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
+  '@standard-community/standard-json@0.3.7(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@types/json-schema': 7.0.15
       quansync: 0.2.11
     optionalDependencies:
-      arktype: 2.2.3
+      arktype: 2.2.8
       typebox: 1.3.7
       zod: 4.6.5
       zod-to-json-schema: 3.25.2(zod@4.6.5)
 
-  '@standard-community/standard-openapi@0.2.10(@standard-community/standard-json@0.3.6(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.3)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5))(@standard-schema/spec@1.1.0)(arktype@2.2.3)(openapi-types@12.1.3)(typebox@1.3.7)(zod@4.6.5)':
+  '@standard-community/standard-openapi@0.2.11(@standard-community/standard-json@0.3.7(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5))(@standard-schema/spec@1.1.0)(arktype@2.2.8)(openapi-types@12.1.3)(typebox@1.3.7)(zod@4.6.5)':
     dependencies:
-      '@standard-community/standard-json': 0.3.6(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.3)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@standard-community/standard-json': 0.3.7(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
       '@standard-schema/spec': 1.1.0
       openapi-types: 12.1.3
     optionalDependencies:
-      arktype: 2.2.3
+      arktype: 2.2.8
       typebox: 1.3.7
       zod: 4.6.5
 
@@ -15098,7 +15103,7 @@ snapshots:
       d3-selection: 3.0.0
       d3-zoom: 3.0.0
 
-  '@zip.js/zip.js@2.17.0': {}
+  '@zip.js/zip.js@2.24.0': {}
 
   abort-controller@3.0.0:
     dependencies:
@@ -15257,15 +15262,15 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  arkregex@0.0.8:
+  arkregex@0.0.13:
     dependencies:
-      '@ark/util': 0.56.2
+      '@ark/util': 0.56.7
 
-  arktype@2.2.3:
+  arktype@2.2.8:
     dependencies:
-      '@ark/schema': 0.56.2
-      '@ark/util': 0.56.2
-      arkregex: 0.0.8
+      '@ark/schema': 0.56.7
+      '@ark/util': 0.56.7
+      arkregex: 0.0.13
 
   asn1js@3.0.10:
     dependencies:
@@ -16647,20 +16652,20 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  home-hosted@0.7.18(supports-color@7.2.0)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5):
+  home-hosted@0.9.2(supports-color@7.2.0)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5):
     dependencies:
       '@grammyjs/auto-retry': 2.0.2(grammy@1.46.0(supports-color@7.2.0))(supports-color@7.2.0)
-      '@namesmt/utils': 0.5.20
-      '@scalar/hono-api-reference': 0.12.4(hono@4.13.8)
-      '@zip.js/zip.js': 2.17.0
-      arktype: 2.2.3
+      '@namesmt/utils': 0.5.21
+      '@scalar/hono-api-reference': 0.12.13(hono@4.13.13)
+      '@zip.js/zip.js': 2.24.0
+      arktype: 2.2.8
       citty: 0.2.2
       consola: 3.4.2
       grammy: 1.46.0(supports-color@7.2.0)
-      hono: 4.13.8
-      hono-openapi: 1.3.3(arktype@2.2.3)(hono@4.13.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
-      srvx: 1.0.5
-      std-env: 4.2.0
+      hono: 4.13.13
+      hono-openapi: 1.5.0(arktype@2.2.8)(hono@4.13.13)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      srvx: 1.0.6
+      std-env: 4.3.0
     transitivePeerDependencies:
       - '@valibot/to-json-schema'
       - effect
@@ -16673,14 +16678,14 @@ snapshots:
       - zod-openapi
       - zod-to-json-schema
 
-  hono-openapi@1.3.3(arktype@2.2.3)(hono@4.13.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5):
+  hono-openapi@1.5.0(arktype@2.2.8)(hono@4.13.13)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5):
     dependencies:
-      '@hono/standard-validator': 0.4.0(@standard-schema/spec@1.1.0)(hono@4.13.8)
-      '@standard-community/standard-json': 0.3.6(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.3)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
-      '@standard-community/standard-openapi': 0.2.10(@standard-community/standard-json@0.3.6(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.3)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5))(@standard-schema/spec@1.1.0)(arktype@2.2.3)(openapi-types@12.1.3)(typebox@1.3.7)(zod@4.6.5)
+      '@hono/standard-validator': 0.4.0(@standard-schema/spec@1.1.0)(hono@4.13.13)
+      '@standard-community/standard-json': 0.3.7(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5)
+      '@standard-community/standard-openapi': 0.2.11(@standard-community/standard-json@0.3.7(@standard-schema/spec@1.1.0)(@types/json-schema@7.0.15)(arktype@2.2.8)(typebox@1.3.7)(zod-to-json-schema@3.25.2(zod@4.6.5))(zod@4.6.5))(@standard-schema/spec@1.1.0)(arktype@2.2.8)(openapi-types@12.1.3)(typebox@1.3.7)(zod@4.6.5)
       '@standard-schema/spec': 1.1.0
       '@types/json-schema': 7.0.15
-      hono: 4.13.8
+      hono: 4.13.13
       openapi-types: 12.1.3
     transitivePeerDependencies:
       - '@valibot/to-json-schema'
@@ -16692,6 +16697,8 @@ snapshots:
       - zod
       - zod-openapi
       - zod-to-json-schema
+
+  hono@4.13.13: {}
 
   hono@4.13.8: {}
 
@@ -19209,7 +19216,7 @@ snapshots:
       sqlite-vec-windows-x64: 0.1.9
     optional: true
 
-  srvx@1.0.5: {}
+  srvx@1.0.6: {}
 
   stack-utils@2.0.6:
     dependencies:
@@ -19226,7 +19233,7 @@ snapshots:
 
   statuses@2.0.2: {}
 
-  std-env@4.2.0: {}
+  std-env@4.3.0: {}
 
   stdin-discarder@0.3.2: {}
 

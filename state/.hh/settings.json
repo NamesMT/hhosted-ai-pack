@@ -1,8 +1,8 @@
 {
   "$schema": "./settings.schema.json",
   "meta": {
-    "writtenBy": "0.7.18",
-    "schema": 1
+    "writtenBy": "0.9.2",
+    "schema": 2
   },
   "control": {
     "port": 4399,
