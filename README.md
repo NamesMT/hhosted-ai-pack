@@ -69,12 +69,26 @@ state/.hh/default/          # the workspace this pack uses
 
 Only the definitions are committed (`settings.json`, `workspaces.json`, and each
 `<workspace>/servers.config.json`/`settings.json`); secrets, logs, TLS keys, backups and `run.json`
-stay out. A pre-0.7 `state/` is relocated by `pnpm run migrate`.
+stay out.
 
 ```bash
 pnpm run migrate --dry-run   # print the steps, write nothing
 pnpm run migrate             # ask, then write — a .bak sits beside each rewritten file
 ```
+
+Each file carries the release that wrote it (`meta.writtenBy`) and its shape (`meta.schema`), and a
+schema-bumping release refuses to start until `migrate` has lifted them — silently running defaults
+that differ from the file is worse than stopping. 0.9 folds the
+`notifications.{telegram,webhooks}` pair into one `destinations` list; this pack sets none, so the
+step is a stamp rewrite.
+
+> [!NOTE]
+> **Why every script passes `--project .`** — `{projectDir}` resolves from `HHOSTED_PROJECT` before it
+> falls back to the current directory, and a panel exports that variable to the servers it supervises.
+> Run `pnpm run up` from a shell that lives under such a panel and the gateways' `dataEnvs`
+> (`{projectDir}/data/.9router`) point at *that* project instead, quietly starting a second copy with
+> an empty database. Pinning `--project .` in `package.json` makes the repo the answer, whoever
+> launches it.
 
 ---
 
@@ -114,7 +128,8 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
   cloned, so pricing tables and provider model lists are untouched.
 - **`vision` for the deepseek ids** — the `*deepseek-v4*` glob entry carries `reasoning` without
   `vision`, so both ids report `vision: false` and refuse image input; a vision-carrying pattern is
-  inserted ahead of the generic one.
+  inserted ahead of the generic one. 0.5.104 added a `*deepseek-v4.*` pattern that already carries
+  `vision`, so the alias resolves through it and this step is only needed for the dotted form.
 - **Account-scoped `4xx`** — 0.5.81 gated fallback on "any `4xx` that matched no rule", so a provider
   holding several keys stopped falling back as soon as one key answered a `412` (Fireworks: *account is
   suspended*). The gate is rewritten to the request-scoped allowlist, as upstream
@@ -136,11 +151,13 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
 `pnpm run test:patch` covers the matchers.
 
 > [!NOTE]
-> `9router` is pinned to an exact `0.5.95`: the patches are written against this build. The dashboard
-> ones anchor on the minified client chunk only — the server-rendered twin is minified differently and
-> is left alone, which `patch:9router` reports as a skipped copy.
-> The `4xx` fix is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — the pin lifts
-> once a release carries it.
+> `9router` is pinned to an exact `0.5.104`: the patches are written against this build. Every release
+> re-minifies the dashboard chunks and renames their locals, so the matchers read the identifiers they
+> need out of a shape-based match (`priority:1,proxyPoolId:`, the one-by-one runner's `queued` seed)
+> instead of quoting them — which is also why the client chunk and its server-rendered twin are both
+> patched now, where 0.5.95 only got the client.
+> The `4xx` fix is upstream as [#4378](https://github.com/decolua/9router/pull/4378) — still open, so
+> the patch and the pin stay until a release carries it.
 
 ---
 
