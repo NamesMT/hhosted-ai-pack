@@ -141,6 +141,12 @@ Every other field, placeholder and policy: [SERVERS.md](https://github.com/Names
   (`testStatus: "error"`), so a broken batch is one click to delete or re-test.
 - **Test Connections Async** — the shipped runner walks the pool one key at a time with a 1s sleep;
   this adds a second button that tests 10 at a time, with the same progress banner and Stop.
+- **Batch delete** — "Delete Selected" `await`ed one `DELETE /api/providers/:id` per key, and each of
+  those is a round trip plus a `deleteProviderConnection` that renumbers the provider's whole pool in
+  its own transaction: O(n) network and O(n²) row writes. A `DELETE /api/providers` taking `{ ids }`
+  now deletes the set in one transaction and renumbers each touched provider once — 57 keys went from
+  ~390 ms to ~50 ms. Nothing requires contiguous priorities (every reader sorts the number), so one
+  renumber per provider is enough to keep the `#n` labels tidy.
 - **Process safety** from [9router#4294](https://github.com/decolua/9router/pull/4294)
   ([#4295](https://github.com/decolua/9router/issues/4295)): `killProcessOnPort()` killed the first
   pid `lsof` returned — clients included — and the panel health-checks that port, so restarting the
