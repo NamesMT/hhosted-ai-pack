@@ -13,7 +13,8 @@ import fs from 'node:fs'
  *    `reasoning` without `vision` — so `deepseek-v4.1-flash` and its `deepseek-v4p1-flash` alias
  *    both report `vision: false` and refuse image input. This inserts a vision-carrying pattern for
  *    each id ahead of the generic one. A release whose generic pattern already has `vision:` needs
- *    nothing, and the patch then leaves the list alone.
+ *    nothing, and the patch then leaves the list alone. 0.5.104 ships a `*deepseek-v4.*` pattern
+ *    that carries `vision`, so the dotted id resolves through it; the alias still needs its own.
  *
  * 3. Account-scoped 4xx: 0.5.81's `checkFallbackError` hands any 4xx that matched no rule straight
  *    back to the client, so a provider holding several keys stops falling back the moment one key
