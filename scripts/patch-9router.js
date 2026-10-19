@@ -22,7 +22,13 @@ import fs from 'node:fs'
  *    the request-scoped allowlist (400/405/406/413/414/415/422) that upstream's fix uses. A release
  *    whose gate is already that allowlist matches nothing and is left alone.
  *
- * 4. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
+ * 4. Batch delete (`scripts/patches/batchDelete.js`): the dashboard's "Delete Selected" awaited one
+ *    `DELETE /api/providers/:id` per key, and each one is a round trip plus a pool renumber inside
+ *    its own transaction — O(n) network and O(n²) row writes. The providers route gains a
+ *    `DELETE` taking `{ ids }` that deletes the set in one transaction and renumbers each touched
+ *    provider once, and the button posts that instead.
+ *
+ * 5. Process safety (`scripts/patches/processScan.cjs`): the CLI kills processes it should not.
  *    Its stale-process sweep takes a pid from the second whitespace token of a matched `ps` line,
  *    and `killProcessOnPort()` runs `lsof -ti:<port>` — which lists *clients* as well as
  *    listeners — then kills the first pid. A supervisor that health-checks that port is such a
@@ -38,7 +44,8 @@ import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { patchFallbackGuard } from './patches/fallbackGuard.js'
-import { patchProviderPage } from './patches/providerPage.js'
+import { patchBatchDelete, patchProviderRoute } from './patches/batchDelete.js'
+import { balancedEnd, patchProviderPage } from './patches/providerPage.js'
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url))
 
@@ -58,6 +65,7 @@ const BUNDLE_DIR = ['app', '.next-cli-build']
 const VENDOR_MODULE = ['patches', 'processScan.cjs']
 const MODULE_TARGET = ['src', 'lib', 'processScan.js']
 const CLI_TARGET = 'cli.js'
+const PROVIDERS_ROUTE = ['app', '.next-cli-build', 'server', 'app', 'api', 'providers', 'route.js']
 
 const argv = new Set(process.argv.slice(2))
 const checkOnly = argv.has('--check')
@@ -269,6 +277,9 @@ const guardFiles = []
 const unpatched = []
 const providerPageFiles = []
 const providerPageProblems = []
+const batchDeleteFiles = []
+const batchDeleteProblems = []
+const batchRouteFiles = []
 let providerPagePatched = 0
 let capabilityFiles = 0
 let patternTables = 0
@@ -332,6 +343,20 @@ for (const file of files) {
     }
   }
 
+  // Batch delete: one request for the whole selection instead of a serial loop. The matcher decides
+  // whether a chunk carries that handler at all, so a page with a different bulk action is left alone.
+  if (original.includes('Delete Selected')) {
+    const batch = patchBatchDelete(source, balancedEnd)
+    if (batch.changed) {
+      source = batch.source
+      batchDeleteFiles.push(path.relative(routerDir, file))
+    }
+    else if (batch.missing.length === 0) {
+      // Already rewired on an earlier run; `--check` reads this as satisfied.
+      batchDeleteFiles.push(path.relative(routerDir, file))
+    }
+  }
+
   if (source !== original)
     pending.push({ file, content: source })
 }
@@ -341,7 +366,22 @@ if (capabilityFiles === 0 && patternTables === 0) {
   process.exit(optional ? 0 : 1)
 }
 
-// ---- 2. process safety ----------------------------------------------------
+// ---- 2. batch delete, server side ------------------------------------------
+const routeFile = path.join(routerDir, ...PROVIDERS_ROUTE)
+const batchRoute = { problems: [], write: null }
+
+if (!fs.existsSync(routeFile))
+  batchRoute.problems.push(`${PROVIDERS_ROUTE.join('/')} not found — 9router layout changed`)
+else {
+  const patched = patchProviderRoute(fs.readFileSync(routeFile, 'utf8'))
+  batchRoute.problems.push(...patched.missing.map(missing => `the providers route: ${missing}`))
+  if (patched.changed)
+    batchRoute.write = { file: routeFile, content: patched.source }
+  else if (patched.missing.length === 0)
+    batchRouteFiles.push(path.relative(routerDir, routeFile))
+}
+
+// ---- 3. process safety ----------------------------------------------------
 const vendorFile = path.join(SCRIPT_DIR, ...VENDOR_MODULE)
 const moduleTarget = path.join(routerDir, ...MODULE_TARGET)
 const cliFile = path.join(routerDir, CLI_TARGET)
@@ -391,6 +431,15 @@ if (checkOnly) {
     failed = true
     console.error('[patch:9router] no account-fallback module in the bundle — 9router layout changed.')
   }
+  if (batchDeleteFiles.length === 0) {
+    failed = true
+    console.error('[patch:9router] batch delete still walks the selection one key at a time.')
+    for (const file of batchDeleteProblems) console.error(`  - ${file}`)
+  }
+  if (batchRoute.write !== null || batchRoute.problems.length > 0) {
+    failed = true
+    console.error(`[patch:9router] batch delete route: ${batchRoute.problems.length > 0 ? batchRoute.problems.join('; ') : 'the DELETE export is missing'}`)
+  }
   if (safety.problems.length > 0) {
     failed = true
     console.error(`[patch:9router] process safety: ${safety.problems.join('; ')}`)
@@ -406,7 +455,7 @@ if (checkOnly) {
   const fallback = guardFiles.length === 0 && fallbackModuleFiles > 0
     ? `account fallback in ${fallbackModuleFiles} file(s)`
     : `account fallback patched in ${guardFiles.length} file(s)`
-  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list, ${fallback}, the provider page (keys last, Select Errors, async test) and the process-safety patch are in place`)
+  console.log(`[patch:9router] ok — ${capabilityFiles} capability file(s), the vision caps pattern list, ${fallback}, the provider page (keys last, Select Errors, async test), batch delete and the process-safety patch are in place`)
   process.exit(0)
 }
 
@@ -414,9 +463,13 @@ for (const { file, content } of pending)
   atomicWrite(file, content)
 for (const { file, content } of safety.writes)
   atomicWrite(file, content)
+if (batchRoute.write !== null)
+  atomicWrite(batchRoute.write.file, batchRoute.write.content)
 
 if (safety.problems.length > 0)
   console.error(`[patch:9router] process safety: ${safety.problems.join('; ')}`)
+if (batchRoute.problems.length > 0)
+  console.error(`[patch:9router] batch delete route: ${batchRoute.problems.join('; ')}`)
 
 console.log(
   `[patch:9router] ${occurrences} alias occurrence(s) in ${aliasFiles.length} file(s); `
@@ -426,5 +479,7 @@ console.log(
   + `of ${fallbackModuleFiles} carrying the module; `
   + `provider page: ${providerPageFiles.length} file(s) written `
   + `(${providerPageProblems.length} copy/copies skipped); `
+  + `batch delete: ${batchDeleteFiles.length} chunk(s) rewired, `
+  + `${batchRoute.write !== null ? 'the DELETE route written' : 'the DELETE route already present'}; `
   + `process safety: ${safety.writes.length} file(s) written`,
 )
